@@ -44,9 +44,9 @@
 			<h1 class="h3 font-weight-normal">Acceso al sistema</h1>
 			<h6 class="text-muted mb-3">Sistema de Gestión de Laboratorios (SIGEL)</h6>
 			<label for="input-no-control" class="sr-only">Número de Control</label>
-			<input type="text" id="input-no-control" class="form-control" placeholder="Número de Control" required autofocus>
+			<input type="text" id="input-no-control" class="form-control llenado-correcto" placeholder="Número de Control" pattern="[A-Za-z0-9_-]{1,30}" required autofocus>
 			<label for="input-contrasena" class="sr-only">Contraseña</label>
-			<input type="password" id="input-contrasena" class="form-control" placeholder="Contraseña" pattern="[A-Za-z0-9_-]{1,30}" required>
+			<input type="password" id="input-contrasena" class="form-control llenado-correcto" placeholder="Contraseña" required>
 			<button class="btn btn-lg btn-primary btn-block" id="btn-ingresar">Ingresar</button>
 		</form>
 		<p class="mt-3" id="leyenda-registro">Si no tienes una cuenta <span data-toggle="modal" data-target="#registroModal"><b>Registrate aqui</b></span></p>
@@ -71,34 +71,34 @@
                     </div>
 					<div class="form-group col-md-12 text-left">
 						<label for="input-nombre">Nombre (s)</label>
-						<input type="text" class="form-control" id="input-nombre" required>
+						<input type="text" class="form-control llenado-correcto" id="input-nombre" required>
 					</div>
 					<div class="row alinea text-left">
 						<div class="form-group col-md-6">
 							<label for="input-apellido-paterno">Apellido Paterno</label>
-							<input type="text" class="form-control" id="input-apellido-paterno" required>
+							<input type="text" class="form-control llenado-correcto" id="input-apellido-paterno" required>
 						</div>
 						<div class="form-group col-md-6">
 							<label for="input-apellido-materno">Apellido Materno</label>
-							<input type="text" class="form-control" id="input-apellido-materno" required>
+							<input type="text" class="form-control llenado-correcto" id="input-apellido-materno" required>
 						</div>
 					</div>
 					<div class="form-group col-md-12 text-left">
 						<label for="input-nombre">Correo Electrónico</label>
-						<input type="email" class="form-control" id="input-correo" required>
+						<input type="email" class="form-control llenado-correcto" id="input-correo" required>
 					</div>
 					<div class="row text-left alinea">
 						<div class="col-md-6 form-group">
 							<label for="input-nombre">Número de Control</label>
-							<input type="text" class="form-control" id="input-no-control" required>
+							<input type="text" class="form-control llenado-correcto" id="input-no-control" required>
 						</div>
 						<div class="col-md-6 form-group mt-4">
 						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="radio" name="rol" id="check-alumno" value="1" checked>
+							<input class="form-check-input" type="radio" name="rol" id="check-alumno" value="2" checked>
 							<label class="form-check-label" for="check-alumno">Estudiante</label>
 						</div>
 						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="radio" name="rol" id="check-docente" value="2">
+							<input class="form-check-input" type="radio" name="rol" id="check-docente" value="3">
 							<label class="form-check-label" for="check-docente">Docente</label>
 						</div>
 						</div>
@@ -139,7 +139,7 @@
 							<div class="input-group-prepend">
 								<label class="input-group-text" for="input-grupo">Grupo</label>
 							</div>
-							<input class="form-control" type="text" id="input-grupo" required>
+							<input class="form-control llenado-correcto" type="text" id="input-grupo" required>
 						</div>
 					</div>
 
@@ -172,13 +172,13 @@
 			$.ajax({
 				url: '../controllers/UsuarioController.php',
 				type: 'post',
-				data: {param1: 'checkUser', param2: $('#input-no-control').val(), param3:$('#input-contrasena').val(), 
+				data: {param1: 'revisaUsuario', param2: $('#input-no-control').val(), param3:$('#input-contrasena').val(), 
 				},
 				dataType: 'json',
 			})
 			.done(function(response) {
 				if(response.success==true){
-					location.href='usuario/inicio.php';
+					location.href='./' + response.dir + '/inicio.php';
 				}
 				else{
 					$('#error').html('Usuario y/o contraseña incorrectos');
@@ -233,14 +233,14 @@
 			$.ajax({
 				url: '../controllers/UsuarioController.php',
 				type: 'post',
-				data: {param1: 'registerUser', param2: datos},
+				data: {param1: 'registrarUsuario', param2: datos},
 				dataType: 'json',
 			})
 			.done(function(response) 
 			{
 				if(response.success === true)
 				{
-					alert("Tu consetraseña es: " + response.msg +" puedes cambiarla en el menú opciones.");
+					alert("Tu contraseña es: " + response.msg +" puedes cambiarla en el menú opciones.");
 					$('#registroModal').modal('hide');
 				}
 				else if(response['error'] == 1 )

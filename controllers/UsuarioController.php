@@ -5,14 +5,34 @@ require_once ('../models/Usuario.php');
 //para ajax
 switch ($_POST['param1'])
 {
-    case 'checkUser':
+    case 'revisaUsuario':
         $UsuarioController = new UsuarioController();
         $user = $UsuarioController->verifica_usuario();
         echo json_encode($user);
         break;
-    case 'registerUser':
+    case 'registrarUsuario':
             $UsuarioController = new UsuarioController();
             $user = $UsuarioController->registrar_usuario();
+            echo json_encode($user);
+            break;
+    case 'getUsers':
+            $UsuarioController = new UsuarioController();
+            $user = $UsuarioController->obtener_usuarios();
+            echo json_encode($user);
+            break;
+    case 'editarUsuario':
+            $UsuarioController = new UsuarioController();
+            $user = $UsuarioController->editar_usuario();
+            echo json_encode($user);
+            break;
+    case 'reiniciar_contrasena':
+            $UsuarioController = new UsuarioController();
+            $user = $UsuarioController->reinicia_contrasena();
+            echo json_encode($user);
+            break;
+    case 'eliminar_usuario':
+            $UsuarioController = new UsuarioController();
+            $user = $UsuarioController->elimina_usuario();
             echo json_encode($user);
             break;
 
@@ -21,9 +41,14 @@ switch ($_POST['param1'])
 
 Class UsuarioController{
     
+    /**
+     * Obtiene los datos del usuario si es correcta su contraseña
+     *
+     * @return $datos -> dirección de página inicio
+     */
     function verifica_Usuario(){
         $Usuario = new Usuario();
-        $resultado = $Usuario->get_usuario($_POST['param2'],$_POST['param3']);
+        $resultado = $Usuario->obten_usuario($_POST['param2'],$_POST['param3']);
 
         if ($resultado === 0)
         {
@@ -41,20 +66,31 @@ Class UsuarioController{
 
         }
         else{
+            
+            session_start();
+            $_SESSION['no_control'] = $resultado['numero_control'];
+            $_SESSION['nombre'] = $resultado['nombre'];
+            // $datos ['prestamos'] = $resultado['prestamos'];
+            $_SESSION['rol'] = $resultado['id_rol'];
+
             $datos = array();
             $datos["success"] = true;
-            $datos ['id'] = $resultado['id'];
-            $datos ['usuario'] = $resultado['nombreUsuario'];
-            $datos ['nombre'] = $resultado['nombre'] . " " . $resultado['primerApellido'];
-            $datos ['estatus'] = $resultado['estatus'];
-            $datos ['rol_id'] = $resultado['rol'];
+            if ($resultado['id_rol'] === "1" )
+            {
+                $datos['dir'] = "./admin";
+            } else {
+                $datos['dir'] = "./user";
+            }
        
-            session_start();
-            $_SESSION['usuario']=$datos;
         }
         return $datos;
     }
 
+    /**
+     * Manda la información del usuario para ser guardada en la bd
+     *
+     * @return void
+     */
     function registrar_usuario()
     {
         $Usuario = new Usuario();
@@ -87,6 +123,110 @@ Class UsuarioController{
         }
 
         return $info;
+    }
+
+    /**
+     * Obtiene la lista completa de los usuarios
+     *
+     * @return void
+     */
+    function obtener_usuarios()
+    {
+        $Usuario = new Usuario();
+        $resultado = $Usuario->obten_usuarios();
+
+       if ($resultado === 0)
+            $datos = array(
+                "success" => false,
+                "mensaje" => "sin datos"
+            );
+        else{
+            $datos = $resultado;
+        }
+
+        return $datos;
+    }
+
+    function editar_usuario()
+    {
+        $Usuario = new Usuario();
+        $resultado = $Usuario->actualiza_usuario($_POST['param2']);
+
+        if ($resultado === "0")
+            $datos = array(
+                "success" => false,
+                "mensaje" => "sin datos"
+            );
+        else{
+            if($resultado !== "")
+            {
+                $datos = array(
+                    "success" => true,
+                    "mensaje" => "El usuario a ha sido modificado con exito."
+                );
+            } else {
+                $datos = array(
+                    "success" => true,
+                    "mensaje" => "El usuario a ha sido modificado con exito. La contraseña es: " . $resultado
+                );
+
+            }
+        }
+
+        return $datos;
+
+    }
+
+    /**
+     * Envia el id del usuario para reiniciar la contraseña
+     *
+     * @return void
+     */
+    function reinicia_contrasena()
+    {
+        $Usuario = new Usuario();
+        $resultado = $Usuario->contrasena_default($_POST['param2']);
+
+        if ($resultado === "0")
+            $datos = array(
+                "success" => false,
+                "mensaje" => "sin datos"
+            );
+        else{
+            $datos = array(
+                "success" => true,
+                "mensaje" => "La contraseña se ha restaurado con éxito. La contraseña es: " . $resultado
+            );
+        }
+
+        return $datos;
+
+    }
+
+    /**
+     * Envia el id para su desactivado
+     *
+     * @return void
+     */
+    function elimina_usuario()
+    {
+        $Usuario = new Usuario();
+        $resultado = $Usuario->eliminar_usuario($_POST['param2']);
+
+        if ($resultado === "0")
+            $datos = array(
+                "success" => false,
+                "mensaje" => "sin datos"
+            );
+        else{
+            $datos = array(
+                "success" => true,
+                "mensaje" => "El usuario se ha elimina con exito"
+            );
+        }
+
+        return $datos;
+
     }
 
 

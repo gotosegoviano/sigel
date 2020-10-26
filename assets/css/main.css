@@ -1,0 +1,50 @@
+/*****************************
+    Barra lateral 
+******************************/
+
+.sidebar-brand-icon .largo{
+    width: 100%;
+}
+
+.sidebar-brand-icon .corto{
+    width: 100%;
+}
+
+.sidebar-brand-icon .corto{
+    display: none;
+}
+
+.sidebar.toggled .sidebar-brand .largo{
+    display:none;
+}
+
+.sidebar.toggled .sidebar-brand .corto {
+    display: block;
+}
+
+.navbar-nav {
+    background-color: #FFF;
+    border-right: 1px solid #DDD;
+}
+
+.sidebar .nav-item .btn > i {
+    font-weight: 600!important;
+}
+
+.sidebar-dark .nav-item .nav-link:active, .sidebar-dark .nav-item .nav-link:focus, .sidebar-dark .nav-item .btn {
+    border: 0
+}
+
+.sidebar-dark .nav-item .nav-link:active, .sidebar-dark .nav-item .nav-link:focus, .sidebar-dark .nav-item .btn:hover > i,
+.sidebar-dark .nav-item .nav-link:active, .sidebar-dark .nav-item .nav-link:focus, .sidebar-dark .nav-item .btn:hover > span{
+    color: #FFF !important;
+}
+
+
+
+/************************
+    Usuarios 
+ ************************/
+ .tabla-principal {
+     cursor: pointer;
+ }
