@@ -1,13 +1,13 @@
 <?php
 session_start();
-if(!isset($_SESSION['no_control']))
+/*if(!isset($_SESSION['no_control']))
 {
     header('Location:../');
 } else if($_SESSION['rol'] !== "1") {
     header('Location:./user/inicio.php');
 }
 // Obtenemos el nombre de la pagina para agregar el título
-$curPageName = substr($_SERVER["SCRIPT_NAME"],strrpos($_SERVER["SCRIPT_NAME"],"/")+1);
+$curPageName = substr($_SERVER["SCRIPT_NAME"],strrpos($_SERVER["SCRIPT_NAME"],"/")+1); */
 ?>
 
 <!DOCTYPE html>

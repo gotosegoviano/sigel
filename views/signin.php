@@ -223,7 +223,7 @@
 						apellido_materno:	$('#input-apellido-materno').val(),
 						apellido_paterno:	$('#input-apellido-paterno').val(),
 						correo:				$('#input-correo').val(),
-						numero_control:		$('#input-no-control').val()	,
+						numero_control:		$('#input-no-control').val(),
 						rol:				$("input[name='rol']:checked").val(),
 						carrera:			$('#select-carrera').children("option:selected").val(),
 						grado:				$('#select-grado').children("option:selected").val(),

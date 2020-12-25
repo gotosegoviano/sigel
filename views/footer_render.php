@@ -53,7 +53,7 @@
         <div class="modal-body">Si deja algún cambio sin guardar se borrará y tendrá que iniciar de nuevo su solicitud.</div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
-          <a class="btn btn-primary" href="./signin.php">Salir</a>
+          <a class="btn btn-primary" href="../salir.php">Salir</a>
         </div>
       </div>
     </div>

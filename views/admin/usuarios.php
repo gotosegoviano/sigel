@@ -189,7 +189,7 @@ include("../footer_render.php");
         },
         "columns": [
             {"data": "id_usuario", visible: false},
-            {"data": "numero_control", className: "text-center"},
+            {"data": "no_control", className: "text-center"},
             {"data": "nombre", className: "text-center"},
             {"data": "correo", className: "text-center"},
             {"data": "carrera", className: "text-center"},

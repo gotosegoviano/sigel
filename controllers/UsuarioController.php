@@ -65,6 +65,13 @@ Class UsuarioController{
             );
 
         }
+        else if($resultado === -1)
+        {
+            $datos = array(
+                "success" => false,
+                "mensaje" => "Hubo un problema desconocido. Contacte al administrador"
+            );
+        }
         else{
             
             session_start();
@@ -74,12 +81,13 @@ Class UsuarioController{
             $_SESSION['rol'] = $resultado['id_rol'];
 
             $datos = array();
+            $datos["datos"] = $resultado;
             $datos["success"] = true;
-            if ($resultado['id_rol'] === "1" )
+            if ($resultado['id_rol'] == 1 )
             {
-                $datos['dir'] = "./admin";
+                $datos['dir'] = "admin";
             } else {
-                $datos['dir'] = "./user";
+                $datos['dir'] = "user";
             }
        
         }
@@ -105,13 +113,15 @@ Class UsuarioController{
                     'error' => 1,
                     'msg' => "El usuario ya está registrado",
                 );
+            } else {
+                $info = $resultado;
             }
         } else {
             if($resultado === 0)
             {
                 $info = array(
                     "success" => false,
-                    "mensaje" => "sin datos ",
+                    "mensaje" => "Hubo un error al guardar la información. Contacte al admonistrador ",
                 );
             }
             else {

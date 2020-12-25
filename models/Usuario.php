@@ -78,16 +78,16 @@
                 $stmt->bindParam(':apellido_paterno',$datos[0]['apellido_paterno'], PDO::PARAM_STR);
                 $stmt->bindParam(':apellido_materno',$datos[0]['apellido_materno'], PDO::PARAM_STR);
                 $stmt->bindParam(':correo',$datos[0]['correo'], PDO::PARAM_STR);
-                $stmt->bindParam(':carrera',$datos[0]['carrera'], PDO::PARAM_STR);
+                $stmt->bindParam(':carrera',$datos[0]['carrera'], PDO::PARAM_INT);
                 $stmt->bindParam(':grado',$datos[0]['grado'], PDO::PARAM_STR);
                 $stmt->bindParam(':grupo',$datos[0]['grupo'], PDO::PARAM_STR);
                 $stmt->bindParam(':no_control',$datos[0]['numero_control'], PDO::PARAM_STR);
                 $stmt->bindParam(':contrasena',$pass_hash, PDO::PARAM_STR);
-                $stmt->bindParam(':rol',$datos[0]['rol'], PDO::PARAM_STR);
+                $stmt->bindParam(':rol',$datos[0]['rol'], PDO::PARAM_INT);
                 
                 if(!$stmt->execute())
                 {
-                    return 0 ;
+                    return 0;
                 } else 
                 {
                     return $pass;
