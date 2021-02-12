@@ -1,13 +1,13 @@
 <?php
 session_start();
-/*if(!isset($_SESSION['no_control']))
+if(!isset($_SESSION['no_control']))
 {
-    header('Location:../');
+    header('Location:../signin.php');
 } else if($_SESSION['rol'] !== "1") {
     header('Location:./user/inicio.php');
 }
 // Obtenemos el nombre de la pagina para agregar el título
-$curPageName = substr($_SERVER["SCRIPT_NAME"],strrpos($_SERVER["SCRIPT_NAME"],"/")+1); */
+$curPageName = substr($_SERVER["SCRIPT_NAME"],strrpos($_SERVER["SCRIPT_NAME"],"/")+1); 
 ?>
 
 <!DOCTYPE html>
@@ -31,8 +31,11 @@ $curPageName = substr($_SERVER["SCRIPT_NAME"],strrpos($_SERVER["SCRIPT_NAME"],"/
 		case 'usuarios.php':
 			echo 'Usuarios';
 			break;
-		case 'inicio.php':
-			echo 'Inicio';
+		case 'materiales.php':
+			echo 'Materiales';
+			break;
+		case 'materiales_danados.php':
+			echo 'Materiales Dañados';
 			break;
 		case 'inicio.php':
 			echo 'Inicio';
@@ -55,9 +58,19 @@ $curPageName = substr($_SERVER["SCRIPT_NAME"],strrpos($_SERVER["SCRIPT_NAME"],"/
   <!-- Custom datatables-->
   <link href="../../assets/css/jquery.dataTables.min.css" rel="stylesheet">
 
+  <!-- Custom select2 -->
+  <link href="../../vendor/select2/select2/dist/css/select2.min.css" rel="stylesheet" />
+
 </head>
 
 <body id="page-top" class="d-flex flex-column h-100">
+
+  <!-- Loading spinner -->
+  <div id="overlay">
+    <div class="cv-spinner">
+      <span class="spinner"></span>
+    </div>
+  </div>
 
   <!-- Page Wrapper -->
   <div id="wrapper">
@@ -106,14 +119,14 @@ $curPageName = substr($_SERVER["SCRIPT_NAME"],strrpos($_SERVER["SCRIPT_NAME"],"/
 
             <!-- Nav Item - Opción Administrar  -->';
             echo $curPageName === "materiales.php" ? '<li class="nav-item active">' : '<li class="nav-item">';
-                echo '<a class="nav-link" href="charts.html">
-                <i class="fas fa-fw fa-chart-area"></i>
+                echo '<a class="nav-link" href="materiales.php">
+                <i class="fas fa-fw fa-vials"></i>
                 <span>Administrar</span></a>
             </li>
 
             <!-- Nav Item - Opción Dañados -->';
-            echo $curPageName === "inicio.php" ? '<li class="nav-item active">' : '<li class="nav-item">';
-                echo '<a class="nav-link" href="charts.html">
+            echo $curPageName === "materiales_danados.php" ? '<li class="nav-item active">' : '<li class="nav-item">';
+                echo '<a class="nav-link" href="materiales_danados.php">
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>Dañados</span></a>
             </li>

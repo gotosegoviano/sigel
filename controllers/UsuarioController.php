@@ -20,6 +20,11 @@ switch ($_POST['param1'])
             $user = $UsuarioController->obtener_usuarios();
             echo json_encode($user);
             break;
+    case 'get_usuario':
+            $UsuarioController = new UsuarioController();
+            $user = $UsuarioController->obten_usuario();
+            echo json_encode($user);
+            break;
     case 'editarUsuario':
             $UsuarioController = new UsuarioController();
             $user = $UsuarioController->editar_usuario();
@@ -33,6 +38,11 @@ switch ($_POST['param1'])
     case 'eliminar_usuario':
             $UsuarioController = new UsuarioController();
             $user = $UsuarioController->elimina_usuario();
+            echo json_encode($user);
+            break;
+    case 'getUsuarioSelect':
+            $UsuarioController = new UsuarioController();
+            $user = $UsuarioController->obtener_usuarios_select();
             echo json_encode($user);
             break;
 
@@ -146,10 +156,12 @@ Class UsuarioController{
         $resultado = $Usuario->obten_usuarios();
 
        if ($resultado === 0)
+       {
             $datos = array(
                 "success" => false,
                 "mensaje" => "sin datos"
             );
+        }
         else{
             $datos = $resultado;
         }
@@ -157,6 +169,35 @@ Class UsuarioController{
         return $datos;
     }
 
+
+    /**
+     * Obtine la información completa de un usuario
+     *
+     * @return void
+     */
+    function obten_usuario()
+    {
+        $Usuario = new Usuario();
+        $resultado = $Usuario->obtener_usuario($_POST['param2']);
+
+        if($resultado === 0)
+        {
+            $datos = array(
+                "success" => false,
+                "mensaje" => "Sin datos"
+            );
+        } else{ 
+            $datos = $resultado;
+        }
+
+        return $datos;
+    }
+
+    /**
+     * Edita un usaurio seleccionado
+     *
+     * @return void
+     */
     function editar_usuario()
     {
         $Usuario = new Usuario();
@@ -168,7 +209,7 @@ Class UsuarioController{
                 "mensaje" => "sin datos"
             );
         else{
-            if($resultado !== "")
+            if($resultado === "")
             {
                 $datos = array(
                     "success" => true,
@@ -182,9 +223,7 @@ Class UsuarioController{
 
             }
         }
-
         return $datos;
-
     }
 
     /**
@@ -237,6 +276,29 @@ Class UsuarioController{
 
         return $datos;
 
+    }
+
+    /**
+     * Obtiene los datos para rellenar el select responsable en danos materiales
+     *
+     * @return void
+     */
+    function obtener_usuarios_select()
+    {
+        $Usuario = new Usuario();
+        $resultado = $Usuario->obten_usuarios_select($_POST['palabra']);
+
+        if ($resultado === "0"){
+            $datos = array(
+                "success" => false,
+                "msg" => "Hubo un error al obtener los datos"
+            );
+        }
+        else{
+            $datos = $resultado;
+        }
+
+        return $datos;
     }
 
 

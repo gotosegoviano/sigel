@@ -69,3 +69,27 @@
 
   <!-- Custom scripts for all pages-->
   <script src="../../assets/js/sb-admin-2.min.js"></script>
+
+  <!-- CodeBar Generetor -->
+  <script src="../../assets/js/JsBarcode.all.min.js"></script>
+
+  <!-- picEyes Modal view Generator -->
+  <script src="../../assets/js/jquery.picEyes.js"></script>
+
+  <!-- SELECT2 custom -->
+  <script src="../../vendor/select2/select2/dist/js/select2.min.js"></script>
+
+<script defer>
+    $(document).ajaxStart(function(){
+        // Show image container
+        $("#overlay").show();
+    }).ajaxComplete(function(){
+        // Hide image container
+        $("#overlay").hide();
+    });
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+
+</script>

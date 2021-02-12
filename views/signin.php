@@ -156,6 +156,23 @@
 <!--	<script src="../assets/js/popper.min.js"></script>-->
 	<script src="../assets/js/bootstrap.min.js"></script>
 	<script defer>
+
+	/* Ocultar campos carrera, grupo y grado */
+	$("input[name='rol']").on('change', function(e) {
+		console.log($(this).val())
+		if ($(this).val() === "2")
+		{
+			$('#select-carrera').parent().removeClass('d-none')
+			$('#select-grado').parent().removeClass('d-none')
+			$('#input-grupo').parent().removeClass('d-none')
+			$('input-grupo').attr('required', true)
+		} else {
+			$('#select-carrera').parent().addClass('d-none')
+			$('#select-grado').parent().addClass('d-none')
+			$('#input-grupo').parent().addClass('d-none')
+			$('input-grupo').attr('required', false)
+		}
+	})
 	
 	/* Evento al presionar el botón ingresar */
 	$('#btn-ingresar').click(function(e) {

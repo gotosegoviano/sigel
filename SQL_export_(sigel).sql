@@ -4,14 +4,14 @@ USE sigel
 CREATE TABLE roles(
 	`id_rol` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`rol` VARCHAR(50) COMMENT '1 - Administrador, 2 - Estudiante, 3 - Docente',
-	`estatus` TINYINT(2)
+	`estatus` TINYINT(2) DEFAULT 1
 ) 
 INSERT INTO roles (`rol`) VALUES ('Administrador'), ('Estudiante'), ('Docente')
 
 CREATE TABLE carreras (
 	`id_carrera` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`carrera` VARCHAR(100),
-	`estatus` TINYINT(2)
+	`estatus` TINYINT(2) DEFAULT 1
 )
 INSERT INTO carreras (`carrera`) VALUES ('Ingeniería en Mecatrónica'), ('Ingeniería en Sistemas Computacionales'), ('Ingeniería Industrial'), ('Industrias Alimentarias')
 
@@ -36,25 +36,26 @@ CREATE TABLE datos_usuarios (
 	`usuario` INT(11) NOT NULL,
 	`actualizado` TINYINT(1) DEFAULT 1 COMMENT 'Datos actualizados a la fecha',
 	`estatus` TINYINT(2) DEFAULT 1,
+	FOREIGN KEY (`usuario`) REFERENCES usuarios(`id_usuario`)
 	FOREIGN KEY (`id_carrera`) REFERENCES carreras(`id_carrera`)
 )
 
 CREATE TABLE tipos_materiales (
 	`id_tipo` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`tipo` VARCHAR(100),
-	`estatus` TINYINT(2)
+	`estatus` TINYINT(2) DEFAULT 1
 )
 
 CREATE TABLE marcas (
 	`id_marca` INT NOT  NULL AUTO_INCREMENT PRIMARY KEY,
 	`marca` VARCHAR(100),
-	`estatus` TINYINT(2)
+	`estatus` TINYINT(2) DEFAULT 1
 )
 
 CREATE TABLE categorias (
 	`id_categoria` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`categoria` VARCHAR(100),
-	`estatus` TINYINT(2)
+	`estatus` TINYINT(2) DEFAULT 1
 )
 
 CREATE TABLE materiales (
@@ -66,7 +67,7 @@ CREATE TABLE materiales (
 	`alerta` INT COMMENT 'Minimo aceptable antes de realizar pedido de nuevo material',
 	`id_marca` INT,
 	`id_categoria` INT,
-	`estatus` TINYINT(2),
+	`estatus` TINYINT(2) DEFAULT 1,
 	FOREIGN KEY (`id_tipo`) REFERENCES tipos_materiales(`id_tipo`),
 	FOREIGN KEY (`id_marca`) REFERENCES marcas(`id_marca`),
 	FOREIGN KEY (`id_categoria`) REFERENCES categorias(`id_categoria`)
@@ -77,10 +78,10 @@ CREATE TABLE materiales_danados (
 	`id_material` INT NOT NULL,
 	`id_usuario` INT NOT NULL,
 	`cantidad` INT NOT NULL,
-	`fecha_hora` DATETIME,
+	`fecha` DATE,
 	`evidencia` VARCHAR(500),
 	`estado` TINYINT(2) DEFAULT (1) COMMENT 'Estado en el que se encuetra la recuperacion del material. 1 - Pendiente, 2 - Recuperado',
-	`estatus` TINYINT(2),
+	`estatus` TINYINT(2) DEFAULT 1,
 	FOREIGN KEY (`id_material`) REFERENCES materiales(`id_material`),
 	FOREIGN KEY (`id_usuario`) REFERENCES usuarios(`id_usuario`)
 )
