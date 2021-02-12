@@ -22,7 +22,6 @@ include("../encabezado_render.php");
                     <th scope="col">Carrera</th>
                     <th scope="col">Grupo</th>
                     <th scope="col">Rol</th>
-                    <th scope="col">Estatus</th>
                 </tr>
             </thead>
             <tbody>
@@ -82,7 +81,7 @@ include("../encabezado_render.php");
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="rol" id="check-administrador" value="1">
-                    <label class="form-check-label" for="check-docente">Docente</label>
+                    <label class="form-check-label" for="check-administrador">Administrador</label>
                 </div>
                 </div>
             </div>
@@ -166,7 +165,7 @@ include("../footer_render.php");
 <script defer>
     let data
 
-    // Obtenemos los datos de la tabla de usuarios
+    // Obtiene los datos de la tabla de usuarios
     $('#tabla-usuarios').DataTable({
         "ajax": {
             "type": "POST",
@@ -195,11 +194,37 @@ include("../footer_render.php");
             {"data": "carrera", className: "text-center"},
             {"data": "grupo", className: "text-center"},
             {"data": "rol", className: "text-center"},
-            {"data": "estatus", className: "text-center"}
         ]
     });
 
-   // Obtenemos datos de la fila presionada y mostramos el modal
+    /* Ocultar campos carrera, grupo y grado */
+	$("input[name='rol']").on('change', function(e) {
+		console.log($(this).val())
+		if ($(this).val() === "2")
+		{
+			$('#select-carrera').parent().removeClass('d-none')
+			$('#select-grado').parent().removeClass('d-none')
+			$('#input-grupo').parent().removeClass('d-none')
+			$('#input-grupo').attr('required', true)
+		} else {
+			$('#select-carrera').parent().addClass('d-none')
+			$('#select-grado').parent().addClass('d-none')
+			$('#input-grupo').parent().addClass('d-none')
+			$('#input-grupo').removeAttr('required')
+		}
+    })
+    
+    // Cambia el texto en la acción del switch activar/desactivar
+    $('#sw-estatus').on('change', function(e) {
+        if ($(this).is(':checked'))
+        {
+            $("label[for='"+this.id+"']").text("Activo")
+        } else {
+            $("label[for='"+this.id+"']").text("Desactivado")
+        }
+    })
+
+   // Obtiene datos de la fila presionada y mostramos el modal
    $('#tabla-usuarios tbody').on( 'click', 'td', function () {
         table = $('#tabla-usuarios').DataTable()
         data = table.row( $(this).parents('tr') ).data()
@@ -207,40 +232,55 @@ include("../footer_render.php");
         $('#editModal').modal('show')
     });
 
-    // Cargamos los datos obtenidos al presionar una fila en la tabla
+    // Carga los datos obtenidos al presionar una fila en la tabla
     $('#editModal').on('shown.bs.modal', function (e) {
         if(data == null) {
+            $('#editModalLabel').text("Nuevo usuario")
             $('#btn-guardar').text("Guardar")
             $('#btn-borrar-modal').addClass('d-none')  
             $('#btn-reiniciar').addClass('d-none')  
         } else {
-            // $('#btn-guardar').text("Guardar Cambios")
+            $('#btn-guardar').text("Actualizar")
             $('#btn-borrar-modal').removeClass('d-none')  
             $('#btn-reiniciar').removeClass('d-none')  
-            const nombre = data.nombre.split(" ")
-            const grupo = data.grupo.split(" ")
-            $('#input-nombre').val(nombre[0])
-            $('#input-apellido-paterno').val(nombre[1])
-            $('#input-apellido-materno').val(nombre[2])
-            $('#input-correo').val(data.correo)
-            $('#input-no-control').val(data.numero_control)
-            data.rol === "Estudiante" ? $('#check-estudiante').attr('checked', true) : $('#check-docente').attr('checked', true)
-            switch (data.carrera) {
-                case "Ingeniería en Mecatrónica":
-                    $('#select-carrera').val(1)
-                    break;
-                case "Ingeniería en Sistemas Computacionales":
-                    $('#select-carrera').val(2)
-                    break;
-                case "Ingeniería Industrial":
-                    $('#select-carrera').val(3)
-                    break;
-                case "Industrias Alimentarias":
-                    $('#select-carrera').val(4)
-                    break;
-            }
-            $('#select-grado').val(grupo[0])
-            $('#input-grupo').val(grupo[1])
+
+            $.ajax({
+                url: '../../controllers/UsuarioController.php',
+                type: 'post',
+                data: {param1: "get_usuario", param2: data.id_usuario},
+                dataType: 'json',
+            })
+            .done(function(response) 
+            {
+                $('#editModalLabel').text("Editar usuario " + response[0].nombre + " " + response[0].apellido1)
+                $('#input-nombre').val(response[0].nombre)
+                $('#input-apellido-paterno').val(response[0].apellido1)
+                $('#input-apellido-materno').val(response[0].apellido2)
+                $('#input-correo').val(data.correo)
+                $('#input-no-control').val(data.no_control)
+                data.rol === "Estudiante" ? $('#check-estudiante').attr('checked', true) : $('#check-docente').attr('checked', true)
+                switch (data.carrera) {
+                    case "Ingeniería en Mecatrónica":
+                        $('#select-carrera').val(1)
+                        break;
+                    case "Ingeniería en Sistemas Computacionales":
+                        $('#select-carrera').val(2)
+                        break;
+                    case "Ingeniería Industrial":
+                        $('#select-carrera').val(3)
+                        break;
+                    case "Industrias Alimentarias":
+                        $('#select-carrera').val(4)
+                        break;
+                }
+                const grupo = data.grupo.split(" ")
+                $('#select-grado').val(grupo[0])
+                $('#input-grupo').val(grupo[1])
+            })
+            .fail(function(response) {
+                console.log('error'+response)
+            })
+
         }
 
     })
@@ -262,7 +302,7 @@ include("../footer_render.php");
                 apellido_materno:	$('#input-apellido-materno').val(),
                 apellido_paterno:	$('#input-apellido-paterno').val(),
                 correo:				$('#input-correo').val(),
-                numero_control:		$('#input-no-control').val()	,
+                numero_control:		$('#input-no-control').val(),
                 rol:				$("input[name='rol']:checked").val(),
                 carrera:			$('#select-carrera').children("option:selected").val(),
                 grado:				$('#select-grado').children("option:selected").val(),
@@ -325,6 +365,7 @@ include("../footer_render.php");
             {
                 alert(response.mensaje)
                 $('#editModal').modal('hide')
+                $('#eliminarModal').modal('hide');
                 $("#tabla-usuarios").DataTable().ajax.reload();
             }
             else
@@ -335,7 +376,7 @@ include("../footer_render.php");
     })
 
 
-    // Limpiamos variables e inputs ne modal edit
+    // Limpia variables e inputs ne modal edit
     $('#editModal').on('hidden.bs.modal', function (e) {
         data = null
         $('#frm-usuario')[0].reset();
